@@ -1,5 +1,3 @@
-__author__ = 'janhorak'
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,7 +13,7 @@ def geocode(addr):
     return info
 
 def start():
-    df = pd.read_csv('res\EnergyMix.csv')
+    df = pd.read_csv('res/EnergyMix.csv')
     
     countries = df['Country']
     oil = df['Oil']
