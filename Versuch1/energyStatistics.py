@@ -7,8 +7,8 @@ notInterestingData = numpy.array(['Country', 'Total2009', 'CO2Emm', 'Lat', 'Long
 def init_CSV(path):
     return pandas.read_csv(path)
 
-def collectAndCleanData():
-    cleanedDataFrame = init_CSV("res/EnergyMixGeo.csv")
+def collectAndCleanData(pathToCSV, notInterestingData):
+    cleanedDataFrame = init_CSV(pathToCSV)
     for x in notInterestingData:
         del cleanedDataFrame[x]
     return cleanedDataFrame
@@ -18,7 +18,7 @@ def createBoxPlot():
     kindOfEnergy = 'unknown'
     kindOfEnergyPointer = 1
     plotPositionPointer = 1
-    cleanedData = collectAndCleanData()
+    cleanedData = collectAndCleanData("res/EnergyMixGeo.csv", notInterestingData)
     kindOfEnergy = cleanedData.columns
 
     plt.figure(1)
@@ -36,6 +36,3 @@ def createBoxPlot():
 def printStatistic():
     dataFrame = init_CSV("res/EnergyMixGeo.csv")
     print dataFrame.describe()
-
-
-
