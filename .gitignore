@@ -30,6 +30,10 @@ nosetests.xml
 # Translations
 *.mo
 
+#IDEs
+.idea
+.settings
+
 # Mr Developer
 .mr.developer.cfg
 .project
