@@ -94,19 +94,5 @@ for t in tickers:
       dates[t]=[str(r.split(',')[0]) for r in rows[1:] if r.strip()!='']
       dates[t].reverse()
 
-tmpdatelist = []  
-tmpdatelist = dates.values()
-datelist = tmpdatelist[0]
 
-df = pd.DataFrame(columns=tickers, index=datelist)
 
-for t in tickers:
-    
-    k = 0
-    pricelist = prices.get(t)
-    
-    for j in datelist:
-        df[t][j] = pricelist[k]
-        k = k+1
-
-df.to_csv("res\effectiveRates.csv")
