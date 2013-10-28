@@ -1,0 +1,68 @@
+1.  Optimieren Sie die SVR-Parameter C und Epsilon so dass der Score in der Kreuzvalidierung minimal
+wird. Welche Werte für C und Epsilon liefern das beste Ergebnis?
+
+A:
+Gerundete Werte:
+C = 0.04
+epsilon=0.111
+
+
+
+
+
+
+
+
+
+2.  Für das SVR-Objekt können die Koezienten der linearen Abbildung, welche durch die trainierte
+SVR realisiert wird, ausgegeben werden: meineSVR.coef_. Notieren Sie diese Koezienten für die
+beste SVR.
+
+A:
+nach training werte die in svr.coef_ stehen hier rein kopieren
+Die Werte sind:
+Oil: 
+Gas:
+Coal:
+Nuclear:
+Hydro:
+
+
+
+
+
+
+
+
+
+
+
+
+3.  Welchen Aufschluss geben diese Koezienten über den Einuss der einzelnen Eingangsmerkmale
+auf das Ausgangsmerkmal?
+
+A:
+Die Koeffizienten geben aufschluss, wie stark die einzelnen Eingangsmerkmale für die Ausgabe relevant sind.
+Es wird deutlich, dass die 
+
+
+
+
+
+
+
+
+
+
+
+4.  Wie groß ist die mittlere absolute Differenz zwischen Soll- und Ist-Ausgabe für die beste SVR?
+Diskutieren Sie dieses Ergebnis.
+
+A:
+Die mittlere absolute Differenz beträgt ... .
+Dieser Wert ist sehr gut, das liegt daran, dass die SVR mit allen Daten trainiert wurde. Die Daten mit denen 
+die Differenz ermittelt werden, sind bereits für das Training verwendet worden. Für realistischere Ergebnisse
+müssten neue Daten herangezogen werden.
+
+
+
