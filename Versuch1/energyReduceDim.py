@@ -12,7 +12,7 @@ import math
 
 def start():
     
-    df = pd.read_csv('EnergyMix.csv')
+    df = pd.read_csv('res/EnergyMix.csv')
     
     countries = df['Country']
     oil = df['Oil']

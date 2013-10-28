@@ -2,7 +2,7 @@ import pandas
 import matplotlib.pyplot as plt
 import numpy
 
-notInterestingData = numpy.array(['Country', 'Total2009', 'CO2Emm', 'Lat', 'Long'])
+notInterestingData = numpy.array(['Country', 'Total2009', 'CO2Emm', 'Lat', 'Long', 'Cluster'])
 
 def init_CSV(path):
     return pandas.read_csv(path)

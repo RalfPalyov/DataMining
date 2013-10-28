@@ -7,8 +7,8 @@ import pandas
 import numpy
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
-notInterestingData_In = numpy.array(['Country', 'Total2009', 'Lat', 'CO2Emm', 'Long'])
-notInterestingData_Out = numpy.array(['Country', 'Oil', 'Gas', 'Coal', 'Nuclear', 'Hydro', 'Total2009', 'Lat', 'Long'])
+notInterestingData_In = numpy.array(['Country', 'Total2009', 'Lat', 'CO2Emm', 'Long', 'Cluster'])
+notInterestingData_Out = numpy.array(['Country', 'Oil', 'Gas', 'Coal', 'Nuclear', 'Hydro', 'Total2009', 'Lat', 'Long', 'Cluster'])
 
 
 def learning():
@@ -25,3 +25,5 @@ def learning():
     dataFrame_result = pandas.DataFrame({ 'Co2-Emissions' : Series(trans.scores_, index=['Oil', 'Gas', 'Coal', 'Nuclear', 'Hydro']) })
 
     print dataFrame_result.sort('Co2-Emissions')
+
+learning()

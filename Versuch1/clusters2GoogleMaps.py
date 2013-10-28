@@ -10,7 +10,7 @@ import pandas as pd
    
 def start():
     
-    df = pd.read_csv('EnergyMixGeo.csv')
+    df = pd.read_csv('res/EnergyMixGeo.csv')
     
     g = pm.PyMap()
     
@@ -33,20 +33,18 @@ def start():
     icon4.image = "http://labs.google.com/ridefinder/images/mm_20_yellow.png"
     icon4.shadow = "http://labs.google.com/ridefinder/images/mm_20_shadow.png"
     g.addicon(icon4)
-    
-    #g.key = "ABQIAAAAQQRAsOk3uqvy3Hwwo4CclBTrVPfEE8Ms0qPwyRfPn-DOTlpaLBTvTHRCdf2V6KbzW7PZFYLT8wFD0A"
-    
+
     for c in df.index:
         
-        countryX = df['lat'][c] #alternative: df.loc[c,'Lat']
-        countryY = df['long'][c]
+        countryX = df['Lat'][c]
+        countryY = df['Long'][c]
         countryName = df['Country'][c]
         countryOil = df.loc[c,'Oil']
         countryGas = df.loc[c,'Gas']
         countryCoal = df.loc[c,'Coal']
         countryNuclear = df.loc[c,'Nuclear']
         countryHydro = df.loc[c,'Hydro']
-        countryCluster = df['cluster'][c]
+        countryCluster = df['Cluster'][c]
         countryTotal = countryOil+countryGas+countryCoal+countryNuclear+countryHydro
         
         countryText = countryName + ": Oil=" + str(countryOil) + " Gas= " +str(countryGas) + " Coal= " + str(countryCoal) + " Nuclear= " + str(countryNuclear) + " Hydro= " + str(countryHydro) + " Total= " + str(countryTotal)
