@@ -44,15 +44,15 @@ def start():
     
     for a in countries:
         r = geocode(a)
-        print "%s %s %s" % (a, r['lat'], r['lng'])    
+        print "%s %s %s" % (a, r['lat'], r['lng'])
         lat.append(r['lat'])
         lon.append(r['lng'])
         
     lat2 = np.array(lat)
     long2 = np.array(lon)
     
-    df['lat'] = lat2
-    df['long'] = long2
+    df['Lat'] = lat2
+    df['Long'] = long2
     
     df.to_csv('res/EnergyMixGeo.csv')
     
