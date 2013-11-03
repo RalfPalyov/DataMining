@@ -1,0 +1,4 @@
+Analysieren Sie die Clusterzuweisungen. Gehören die Unternehmen, welche in einem Cluster zusam-
+menfallen, irgendwie zusammen?
+
+A:

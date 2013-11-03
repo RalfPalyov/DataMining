@@ -28,7 +28,7 @@ def r_bestC(rawData, rawDataSelectedMatrix, oldCalcResult, direction, stepSize, 
     if C <= 0:
         C = 0.00001
     
-    calcResult = r_bestEpsilon(rawData, rawDataSelectedMatrix, oldCalcResult, direction = 'backwards', stepSize = 0.25, minStepSize = minStepSize, C = C, epsilon = epsilon)
+    calcResult = r_bestEpsilon(rawData, rawDataSelectedMatrix, oldCalcResult, direction = 'backwards', stepSize = 0.005, minStepSize = minStepSize, C = C, epsilon = epsilon)
     
     print "---------\n\n"
     

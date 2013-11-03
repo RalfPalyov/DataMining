@@ -3,8 +3,8 @@ wird. Welche Werte für C und Epsilon liefern das beste Ergebnis?
 
 A:
 Gerundete Werte:
-C = 0.04
-epsilon=0.111
+C = 0.046
+epsilon=0.125
 
 
 
@@ -19,13 +19,12 @@ SVR realisiert wird, ausgegeben werden: meineSVR.coef_. Notieren Sie diese Koez
 beste SVR.
 
 A:
-nach training werte die in svr.coef_ stehen hier rein kopieren
 Die Werte sind:
-Oil: 
-Gas:
-Coal:
-Nuclear:
-Hydro:
+Oil: -3.069
+Gas: -2.348
+Coal: -3.961
+Nuclear: -0.0007287
+Hydro: -0.001065
 
 
 
@@ -42,8 +41,9 @@ Hydro:
 auf das Ausgangsmerkmal?
 
 A:
-Die Koeffizienten geben aufschluss, wie stark die einzelnen Eingangsmerkmale für die Ausgabe relevant sind.
-Es wird deutlich, dass die 
+Die Koeffizienten geben Aufschluss, wie stark die einzelnen Eingangsmerkmale für die Ausgabe relevant sind.
+Es wird deutlich, dass die Merkmale 'Nuclear' und 'Hydro' im Gegensatz zu den anderen sehr nahe am Wert 0 liegen.
+Dies bedeutet, dass diese zwei Merkmale einen so geringen Einfluss auf das Ausgangsmerkmal haben, dass sie vernachlässigt werden könnten.  
 
 
 
@@ -59,7 +59,7 @@ Es wird deutlich, dass die
 Diskutieren Sie dieses Ergebnis.
 
 A:
-Die mittlere absolute Differenz beträgt ... .
+Die mittlere absolute Differenz beträgt gerundet 0.129.
 Dieser Wert ist sehr gut, das liegt daran, dass die SVR mit allen Daten trainiert wurde. Die Daten mit denen 
 die Differenz ermittelt werden, sind bereits für das Training verwendet worden. Für realistischere Ergebnisse
 müssten neue Daten herangezogen werden.
