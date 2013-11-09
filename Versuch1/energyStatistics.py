@@ -21,7 +21,7 @@ def createBoxPlot():
     cleanedData = collectAndCleanData("res/EnergyMixGeo.csv", notInterestingData)
     kindOfEnergy = cleanedData.columns
 
-    plt.figure(1)
+    plt.figure(1, figsize=(15, 10))
     while live:
         kindOfEnergyTmp = kindOfEnergy[kindOfEnergyPointer]
         plt.subplot(2, 3, plotPositionPointer)
@@ -32,6 +32,25 @@ def createBoxPlot():
         if kindOfEnergyPointer == len(cleanedData.columns):
             live = False
     plt.show()
+
+def createSingleBoxPlots():
+    live = True
+    kindOfEnergy = 'unknown'
+    kindOfEnergyPointer = 1
+    plotPositionPointer = 1
+    cleanedData = collectAndCleanData("res/EnergyMixGeo.csv", notInterestingData)
+    kindOfEnergy = cleanedData.columns
+
+    while live:
+        kindOfEnergyTmp = kindOfEnergy[kindOfEnergyPointer]
+        plt.boxplot(cleanedData[kindOfEnergyTmp], 0)
+        plt.xlabel(kindOfEnergyTmp)
+        kindOfEnergyPointer += 1
+        plotPositionPointer += 1
+        plt.show()
+        if kindOfEnergyPointer == len(cleanedData.columns):
+            live = False
+
 
 def printStatistic():
     dataFrame = init_CSV("res/EnergyMixGeo.csv")

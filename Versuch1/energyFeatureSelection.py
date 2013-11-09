@@ -25,5 +25,3 @@ def learning():
     dataFrame_result = pandas.DataFrame({ 'Co2-Emissions' : Series(trans.scores_, index=['Oil', 'Gas', 'Coal', 'Nuclear', 'Hydro']) })
 
     print dataFrame_result.sort('Co2-Emissions')
-
-learning()
