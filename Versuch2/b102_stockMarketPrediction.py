@@ -50,5 +50,3 @@ def printSharePrice():
 
     plt.show()
 
-
-printSharePrice()
