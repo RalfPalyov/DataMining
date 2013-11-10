@@ -9,6 +9,7 @@ This version applies cleaned data provided by matplotlib.finance
 In the cleaned data also the "open" value is adjusted w.r.t. splits and dividends
 
 """
+from matplotlib.axis import Axis
 
 print __doc__
 
@@ -20,6 +21,7 @@ from matplotlib import finance
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+import time as tm
 
 from sklearn import cluster
 from sklearn import metrics
@@ -55,15 +57,19 @@ symbol_dict = {
         'BA'   : 'Boeing',
         'KO'   : 'Coca Cola',
         'MMM'  : '3M',
+        
         'MCD'  : 'Mc Donalds',
         'PEP'  : 'Pepsi',
         'KFT'  : 'Kraft Foods',
         'K'    : 'Kellogg',
         'UN'   : 'Unilever',
+        
         'MAR'  : 'Marriott',
         'PG'   : 'Procter Gamble',
         'CL'   : 'Colgate-Palmolive',
-        'NWS'  : 'News Corporation',
+        
+        #'NWS'  : 'News Corporation',
+        
         'GE'   : 'General Electrics',
         'WFC'  : 'Wells Fargo',
         'JPM'  : 'JPMorgan Chase',
@@ -101,8 +107,15 @@ print symbols
 print "----------------------------Names---------------------------------------"
 print names
 
+quotes = []
+for symbol in symbols:
+    quotes.append(finance.quotes_historical_yahoo(symbol, d1, d2, asobject=True))
+    tm.sleep(0.1)
+    
+'''
 quotes = [finance.quotes_historical_yahoo(symbol, d1, d2, asobject=True)
                 for symbol in symbols]
+'''
 
 print "----------------------------Quotes---------------------------------------"
 print "Number of quotes:        ",len(quotes)
@@ -127,7 +140,39 @@ affProp.fit(correlation)
 # get cluster labels
 clusters = affProp.labels_
 
-# save quotes and clusters in one data frame
-clusteredQuotes = pd.DataFrame(quotes)
-clusteredQuotes['cluster'] = clusters
+# sort quotes and symbols by clusters
+clusteredQuSy = []
+for unused in range(1 + np.amax(np.array(clusters))):
+    clusteredQuSy.append([]);
+idx = 0
+for clustersEntry in clusters:
+    clusteredQuSy[clustersEntry].append({"quote":quotes[idx], "names":names[idx]})
+    idx = idx + 1 
+
+
+print "------------------------------clusters------------------------------------"
+
+# print a plot for each cluster
+clusterNo = 0
+subplotNo = 1
+for cluster in clusteredQuSy:
+    axis = plt.subplot(410 + (subplotNo))
+    plt.title('Cluster ' + str(clusterNo + 1))
+    
+    print "cluster no.: " + str(clusterNo)
+    
+    for quSy in cluster:
+        
+        print "quSy quote: " + str(quSy["names"])
+        finance.candlestick2(axis, quSy["quote"]["open"], quSy["quote"]["close"], quSy["quote"]["high"], quSy["quote"]["low"], width=1, colorup=[0,1,0], colordown=[1,0,0], alpha=1)
+    
+    clusterNo = clusterNo + 1
+    subplotNo = subplotNo + 1
+    if subplotNo > 4:
+        subplotNo = 1
+        plt.show()
+    print ""
+
+plt.show()
+
 
