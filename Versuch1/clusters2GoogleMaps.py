@@ -47,12 +47,12 @@ def start():
         countryCluster = df['Cluster'][c]
         countryTotal = countryOil+countryGas+countryCoal+countryNuclear+countryHydro
         
-        countryText = countryName + ": Oil=" + str(countryOil) + " Gas= " +str(countryGas) + " Coal= " + str(countryCoal) + " Nuclear= " + str(countryNuclear) + " Hydro= " + str(countryHydro) + " Total= " + str(countryTotal)
+        countryText = countryName + ": Oil=" + str(countryOil) + " Gas= " +str(countryGas) + " Coal= " + str(countryCoal) + " Nuclear= " + str(countryNuclear) + " Hydro= " + str(countryHydro) + " Total2009= " + str(countryTotal)
         
-        s = [countryX,countryY,countryName + str(countryText), 'icon' + str(countryCluster)]
+        s = [countryX,countryY, str(countryText), 'icon' + str(countryCluster)]
         g.maps[0].setpoint(s)
         
     print g.showhtml()
-    open('test.htm','wb').write(g.showhtml())
+    open('res/energyClusters.htm','wb').write(g.showhtml())
 
 start()
