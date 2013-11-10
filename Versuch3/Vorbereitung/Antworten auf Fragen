@@ -1,0 +1,35 @@
+Was ist UCF?
+===========
+
+Die Userbasierte Collaborative Filterung nutzt Ähnlichkeiten zwischen Nutzern.
+Um für Nutzer A eine Empfehlung zu erstellen wird zunächst die Ähnlichkeit zu
+dem ihm an ähnlichsten anderen Nutzer erstellt.
+Dann werden dem Nutzer A die Items empfohlen, die der andere, ihm am ähnlichsten Nutzer
+bereits gekauft hat.
+
+Nachteile
+=========
+
+* Schlechte Skalierung, da meist große Datenmengen
+* User müssen viele Items gekauft haben, damit Ähnlichkeitsbestimmung eindeutiger wird
+-> Unzuverlässig, wenn Nutzer A nicht viel gekauft hat
+
+
+Unterschied zwischen UCF und ICF?
+=================================
+
+ICF ermittelt Ähnlichkeiten zwischen Produkten (Items).
+Grundgedanke dabei ist, dass die Produkte umso ähnlicher werden,
+je mehr Kunden diese Produkte gekauft haben. Die (mathematische Schnitt-)Menge der Kunden ist hier entscheidend.
+
+-> Die nächsten 3 Antworten sind in der Rechnungsdatei zu finden (-> Vorbereitung.py)
+
+Wann ist Cosinus- und Pearsonähnlichkeit besser als euklid. Ähnlichkeit?
+========================================================================
+
+
+Doppelt verschachteltes Dict?
+=============================
+
+last.fm?
+========
