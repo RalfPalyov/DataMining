@@ -99,7 +99,43 @@ def sim_RusselRao(prefs,person1,person2,normed=True):
     if not normed:
         return commons
     else:
-        return commons*1.0/len(prefs[person1])    
+        return commons*1.0/len(prefs[person1])  
+		
+def createLastfmUserDict(group = []):
+    
+    AllBands = []
+    
+    #fill Band-Array
+    for u in group:
+        topartists = u.get_top_artists()[0:20]
+        for t in topartists:
+            print t.item
+            AllBands.append(str(t.item))
+    
+    print AllBands
+        
+    userDict = {}
+    
+    #fill User-Dictionary
+    for u in group:
+        matchList = []  
+        topartists = u.get_top_artists()[0:20]
+        
+        for a in AllBands:
+            for t in topartists:
+                if a == str(t.item):
+                    artistmatch = 1
+                    break
+                else:
+                    artistmatch = 0
+                    
+            matchList.append(artistmatch)              
+            isTopArtist = zip(AllBands, matchList)
+            tmpDict = dict(isTopArtist)
+            matchDict = {u:tmpDict}
+            userDict.update(matchDict)
+    
+    return userDict
             
     
 
