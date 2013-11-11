@@ -1,7 +1,0 @@
-2.1.2
-Interessant zu beobachten ist, dass der Wasserkraft-Anteil Canadas und Brasiliens höher ist als der der USA, obwohl die Gesamtmenge der USA um ein vielfaches höher ist. Der Kohleanteil Chinas scheint auf den ersten Blick in etwa so hoch zu sein wie der Gesamtkohleanteil aller anderen Länder. Die arabischen Länder verzichten nahezu komplett auf Kohle- Wasser- und Atomkraft. 
-Von implementierungstechnischer Seite aus betrachtet gestaltet sich der Zugriff auf die Geo-Daten über die Google Maps-API als sehr einfach. Auch das erzeugen eines Diagramms ist ohne großen Aufwand möglich.
-
-2.2.2
-1. Die euklidische Distanz von Deutschland ist zu Südkorea am geringsten. Dies hängt sicherlich damit zusammen, dass sowohl das Verhältnis der Energieanteile als auch die Gesamtmenge der beiden Länder sehr ähnlich sind.
-2. Bei der hier dargestellten Ähnlichkeit spielt der Gesamtenergieverbrauch eine wichtige Rolle. Länder, die zwar verhältnismäßig nahezu identisch sind, sich aber vom Gesamtverbrauch stark unterscheiden werden trotzdem weit voneinander entfernt dargestellt. Je größer der Unterscheid der Gesamtmenge ist, desto weiter sind auch die Punkte voneinander entfernt. Beim hierarchischen Clustering werden diese Ähnlichkeiten berücksichtigt und verhältnismäßig ähnliche Länder in Cluster zusammengefasst.
