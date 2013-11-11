@@ -4,8 +4,7 @@ Created on 11.11.2013
 @author: am095
 '''
 
-import recommendationsTemplate
-from recommendationsTemplate import sim_euclid, sim_pearson, critics
+from recommendations import sim_euclid, sim_pearson, critics
 
 def topMatches(prefs, person, similarity):
     '''
@@ -15,7 +14,7 @@ def topMatches(prefs, person, similarity):
     Parameters
     prefs: critics list
     person: index in prefs; Defines the critic that will be compared with all others in prefs.
-    similarity: function pointer; Function to calculate similarity (see import recommendationsTemplate)
+    similarity: function pointer; Function to calculate similarity (see import recommendations)
     
     
     Returns
