@@ -1,4 +1,4 @@
-from pandas.compat import scipy
+import scipy.stats.stats as scistat
 
 import math
 import operator
@@ -13,7 +13,7 @@ def cosinusSim(vec1, vec2):
 
 def isAverageFree(vec1, vec2, amountDecimalPlaces):
     cos = cosinusSim(vec1, vec2)
-    pearson = scipy.stats.pearsonr(vec1, vec2)
+    pearson = scistat.pearsonr(vec1, vec2)
     cosString = repr(cos)
     pearString = repr(pearson)
     if cosString[:amountDecimalPlaces] == pearString[:amountDecimalPlaces]:
