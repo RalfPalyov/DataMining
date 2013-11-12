@@ -31,7 +31,7 @@ def getPersons_getFilm(prefs, searchedPerson, filmTitle):
     print resultArray
     return resultArray
 
-def getRecommendations(prefs, person_in, similarity='unknown'):
+def getRecommendations(prefs, person_in, similarity='unknown', printOutput=False):
 
     persons = getCleanedNames(prefs, person_in)
     night_sum = 0
@@ -43,54 +43,64 @@ def getRecommendations(prefs, person_in, similarity='unknown'):
     if similarity == 'euklid':
         for person in persons:
             distance = recommendations.sim_euclid(prefs, person_in, person)
-            print ('Distance between: '+ person+ ' and '+ person_in)
-            print distance
+            if printOutput:
+                print ('Distance between: '+ person+ ' and '+ person_in)
+                print distance
             if distance > 0:
-                print ('Rating of '+person+' for Film: The Night Listener: ' + str(getFilmratings_Night(prefs, person)))
-                print ('Rating of '+person+' for Film: Lady in the Water: ' + str(getFilmratings_Lady(prefs, person)))
-                print ('Rating of '+person+' for Film: Just My Luck: ' + str(getFilmratings_Luck(prefs, person)))
-                print ('Korrelation * Film (Night):')
-                print (recommendations.sim_euclid(prefs, person_in, person)*getFilmratings_Night(prefs, person))
+                if printOutput:
+                    print ('Rating of '+person+' for Film: The Night Listener: ' + str(getFilmratings_Night(prefs, person)))
+                    print ('Rating of '+person+' for Film: Lady in the Water: ' + str(getFilmratings_Lady(prefs, person)))
+                    print ('Rating of '+person+' for Film: Just My Luck: ' + str(getFilmratings_Luck(prefs, person)))
+                    print ('Korrelation * Film (Night):')
+                    print (recommendations.sim_euclid(prefs, person_in, person)*getFilmratings_Night(prefs, person))
                 night_sum += (recommendations.sim_euclid(prefs, person_in, person)*getFilmratings_Night(prefs, person))
                 if recommendations.sim_euclid(prefs, person_in, person)*getFilmratings_Night(prefs, person) > 0:
                     night_Ksum += distance
-                print ('Korrelation * Film (Luck):')
+                if printOutput:
+                    print ('Korrelation * Film (Luck):')
                 luck_sum += (recommendations.sim_euclid(prefs, person_in, person)*getFilmratings_Luck(prefs, person))
                 if recommendations.sim_euclid(prefs, person_in, person)*getFilmratings_Luck(prefs, person) > 0:
                     luck_Ksum += distance
-                print (recommendations.sim_euclid(prefs, person_in, person)*getFilmratings_Luck(prefs, person))
-                print ('Korrelation * Film (Lady):')
+                if printOutput:
+                    print (recommendations.sim_euclid(prefs, person_in, person)*getFilmratings_Luck(prefs, person))
+                    print ('Korrelation * Film (Lady):')
                 lady_sum += (recommendations.sim_euclid(prefs, person_in, person)*getFilmratings_Lady(prefs, person))
                 if recommendations.sim_euclid(prefs, person_in, person)*getFilmratings_Lady(prefs, person) > 0:
                     lady_Ksum += distance
-                print (recommendations.sim_euclid(prefs, person_in, person)*getFilmratings_Lady(prefs, person))
-                print ('---' *10)
+                if printOutput:
+                    print (recommendations.sim_euclid(prefs, person_in, person)*getFilmratings_Lady(prefs, person))
+                    print ('---' *10)
 
     if similarity == 'pearson':
         for person in persons:
             distance = recommendations.sim_pearson(prefs, person_in, person)
-            print ('Distance between: '+ person+ ' and '+ person_in)
-            print distance
+            if printOutput:
+                print ('Distance between: '+ person+ ' and '+ person_in)
+                print distance
             if distance > 0:
-                print ('Rating of '+person+' for Film: The Night Listener: ' + str(getFilmratings_Night(prefs, person)))
-                print ('Rating of '+person+' for Film: Lady in the Water: ' + str(getFilmratings_Lady(prefs, person)))
-                print ('Rating of '+person+' for Film: Just My Luck: ' + str(getFilmratings_Luck(prefs, person)))
-                print ('Korrelation * Film (Night):')
-                print (recommendations.sim_pearson(prefs, person_in, person)*getFilmratings_Night(prefs, person))
+                if printOutput:
+                    print ('Rating of '+person+' for Film: The Night Listener: ' + str(getFilmratings_Night(prefs, person)))
+                    print ('Rating of '+person+' for Film: Lady in the Water: ' + str(getFilmratings_Lady(prefs, person)))
+                    print ('Rating of '+person+' for Film: Just My Luck: ' + str(getFilmratings_Luck(prefs, person)))
+                    print ('Korrelation * Film (Night):')
+                    print (recommendations.sim_pearson(prefs, person_in, person)*getFilmratings_Night(prefs, person))
                 night_sum += (recommendations.sim_pearson(prefs, person_in, person)*getFilmratings_Night(prefs, person))
                 if recommendations.sim_pearson(prefs, person_in, person)*getFilmratings_Night(prefs, person) > 0:
                     night_Ksum += distance
-                print ('Korrelation * Film (Luck):')
+                if printOutput:
+                    print ('Korrelation * Film (Luck):')
                 luck_sum += (recommendations.sim_pearson(prefs, person_in, person)*getFilmratings_Luck(prefs, person))
                 if recommendations.sim_pearson(prefs, person_in, person)*getFilmratings_Luck(prefs, person) > 0:
                     luck_Ksum += distance
-                print (recommendations.sim_pearson(prefs, person_in, person)*getFilmratings_Luck(prefs, person))
-                print ('Korrelation * Film (Lady):')
+                if printOutput:
+                    print (recommendations.sim_pearson(prefs, person_in, person)*getFilmratings_Luck(prefs, person))
+                    print ('Korrelation * Film (Lady):')
                 lady_sum += (recommendations.sim_pearson(prefs, person_in, person)*getFilmratings_Lady(prefs, person))
                 if recommendations.sim_pearson(prefs, person_in, person)*getFilmratings_Lady(prefs, person) > 0:
                     lady_Ksum += distance
-                print (recommendations.sim_pearson(prefs, person_in, person)*getFilmratings_Lady(prefs, person))
-                print ('---' *10)
+                if printOutput:
+                    print (recommendations.sim_pearson(prefs, person_in, person)*getFilmratings_Lady(prefs, person))
+                    print ('---' *10)
 
 
     empfehlungsWert_Lady = lady_sum / lady_Ksum
