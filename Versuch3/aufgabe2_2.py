@@ -6,7 +6,7 @@ Created on 11.11.2013
 
 from recommendations import sim_euclid, sim_pearson, critics
 
-def topMatches(prefs, person, similarity):
+def topMatches(prefs, person, similarity, additional=None):
     '''
     Calculates similarity between each critic in prefs and a single critic.
     
@@ -15,6 +15,7 @@ def topMatches(prefs, person, similarity):
     prefs: critics list
     person: index in prefs; Defines the critic that will be compared with all others in prefs.
     similarity: function pointer; Function to calculate similarity (see import recommendations)
+    additional: optional parameter, if set, the value will be passed through to the similarity function 
     
     
     Returns
@@ -25,7 +26,10 @@ def topMatches(prefs, person, similarity):
     
     for prefIdx, pref in prefs.iteritems():
         if prefIdx != person:
-            result[prefIdx] = similarity(prefs, prefIdx, person)
+            if additional is not None:
+                result[prefIdx] = similarity(prefs, prefIdx, person, additional)
+            else:
+                result[prefIdx] = similarity(prefs, prefIdx, person)
         else:
             result[prefIdx] = 0
         
@@ -53,6 +57,4 @@ def init():
         for resultIdx, result in resultPearson[criticIdx].iteritems():
             print "Index '" + resultIdx + "': " + str(resultPearson[criticIdx][resultIdx])  
         print "_______________________________________________________________________________\n"
-    
-init()
     
