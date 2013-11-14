@@ -115,4 +115,3 @@ def getRecommendations(prefs, person_in, similarity='unknown', printOutput=False
     return sorted(resultArray, reverse=True)
 
 
-
