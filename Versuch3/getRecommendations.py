@@ -46,12 +46,31 @@ def createKSum(dict, person, distance):
 def createRecomm():
     recom = {}
     for item in dic_ksum:
-        recom.__setitem__(item, dic_sum.get(item)/dic_ksum.get(item))
+        if dic_sum.get(item) is not None:
+            try:
+                recom.__setitem__(item, dic_sum.get(item)/dic_ksum.get(item))
+            except ZeroDivisionError:
+                recom.__setitem__(item, 0)
     return recom
 
 def getRecommendations(prefs, person_in, similarity='unknown', printOutput=False):
+    '''
+    This function returned a sorted list of recommendations.
+    The first entry of the returned list is the recommendation-value (numeric, float), the second is
+    the alphabetic name of the key.
+
+    Parameter to pass:
+    - prefs -> Dictionary of Values
+    - person_in -> Person you want to get recommendations
+    - similarity -> euclid or pearson
+    - printOutput -> Boolean, True or False for output
+
+    Returning parameters:
+    - sorted List[] with pattern:
+    [[0.6666666666666666, 'Radio Moscow'], [0.5588425208190283, 'Led Zeppelin'], [0.5563772968714236, 'Pink Floyd'], ...
+    '''
     persons = getCleanedNames(prefs, person_in)
-    if similarity == 'euklid':
+    if similarity == 'euclid':
         for person in persons:
             distance = recommendations.sim_euclid(prefs, person_in, person)
             dataDict_Sum = createSum(prefs, person, distance)
@@ -73,4 +92,4 @@ def getRecommendations(prefs, person_in, similarity='unknown', printOutput=False
 
     return convertDict2List(createRecomm())
 
-# print getRecommendations(filmDict, 'Toby', similarity='pearson', printOutput=False)
+#print getRecommendations(lastFMDict, 'magicgoa', similarity='euclid', printOutput=True)
