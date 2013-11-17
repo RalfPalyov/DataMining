@@ -8,7 +8,6 @@ import pylast
 import recommendations
 import getRecommendations
 import aufgabe2_2
-#import recommendations
 
 def init():
     
@@ -40,13 +39,13 @@ def init():
         
         similarUsers = aufgabe2_2.topMatches(userDict, str(testuser), recommendations.sim_euclid)
         
-        #sort dictionary and save user with the highest distance
+        #sort dictionary and save user and distance
         for key, value in sorted(similarUsers.iteritems(), key=lambda (k,v): (v,k)):
-            users = key
-            distances = value
+            user = key
+            distance = value
             
         print
-        print "Aehnlichster Benutzer fuer " + str(testuser) + " = " + str(users) + " (" + str(round(distances, 3)) + ")" 
+        print "Aehnlichster Benutzer fuer " + str(testuser) + " = " + str(user) + " (" + str(round(distance, 3)) + ")" 
         
         #choose either euclidean or pearson distance
         recoms = getRecommendations.getRecommendations(userDict, str(testuser), similarity='euclid')
