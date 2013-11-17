@@ -5,7 +5,10 @@ Created on Sat Nov 09 11:29:29 2013
 @author: emBrio
 """
 import pylast
-import recommendations as rcmd
+import recommendations
+import getRecommendations
+import aufgabe2_2
+#import recommendations
 
 def init():
     
@@ -18,23 +21,33 @@ def init():
     network = pylast.LastFMNetwork(api_key = API_KEY, api_secret = 
         API_SECRET, username = username, password_hash = password_hash)
     
-    artist = network.get_artist("Radio Moscow")
-    
+    artist = network.get_artist("Queen")
+
     topfans = artist.get_top_fans(10)
     
     group = [a.item for a in topfans]
     
-    userDict = rcmd.createLastfmUserDict(group)
+    userDict = recommendations.createLastfmUserDict(group)
     
-    testband = "Pink Floyd"
+    print userDict
+    
+    #testband="AFI"
     
     for testuser in group:
-        print str(testuser) + " --> " + testband + " = " + str(userDict[testuser][testband])
         
-        #user = ...topMatches(userDict, str(testuser), sim_euclid)
-        #print user
+        #print str(testuser) + " --> " + testband + " = " + str(userDict[testuser][testband])
+        
+        similarUser = aufgabe2_2.topMatches(userDict, str(testuser), similarity='euklid')
+        print "Aehnlichster Benutzer fuer " + str(testUser) + " = " + similarUser
 
-        #recoms = ...getRecommendations(userDict, str(testuser), similarity='euklid')
-        #print recoms
+        recoms = getRecommendations.getRecommendations(userDict, str(testuser), similarity='euclid')
+        print "Empfehlungen fuer " + str(testuser)
+        
+        j = 0
+        
+        for i in recoms:
+            print recoms[j][1]
+            j += 1
+        
 
 init()

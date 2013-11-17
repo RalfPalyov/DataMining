@@ -132,7 +132,7 @@ def createLastfmUserDict(group = []):
             matchList.append(artistmatch)              
             isTopArtist = zip(AllBands, matchList)
             tmpDict = dict(isTopArtist)
-            matchDict = {u:tmpDict}
+            matchDict = {str(u):tmpDict}
             userDict.update(matchDict)
     
     return userDict
