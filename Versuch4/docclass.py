@@ -1,5 +1,4 @@
 
-
 class Classifier:
     __cc = {'Good': 0, 'Bad': 0}
     __fc = {}
