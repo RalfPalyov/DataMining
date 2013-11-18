@@ -55,7 +55,7 @@ class Classifier:
         returns:
         --------
         Value of the count (Integer)'''
-        return self.__cc.get(category).get(f)
+        return self.__fc[f][category]
 
 
     def catcounts(self, category):
@@ -92,6 +92,11 @@ class Classifier:
 
 
     def fprob(self, f, category):
-        pass
+        try:
+            return (self.fcount(f, category))/(self.catcounts(category))
+        except StandardError:
+            print 'Care, ZeroDivision or not on KeyList'
+            return -1
+
 
 
