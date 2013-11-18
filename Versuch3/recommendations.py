@@ -109,11 +109,12 @@ def createLastfmUserDict(group = []):
     for u in group:
         topartists = u.get_top_artists()[0:20]
         for t in topartists:
-            print t.item
+            #print t.item
             AllBands.append(str(t.item))
-    
-    print AllBands
-        
+   
+    #clean multiple entrys
+    AllBands = dict(map(lambda i: (i,1),AllBands)).keys()
+
     userDict = {}
     
     #fill User-Dictionary
@@ -132,7 +133,7 @@ def createLastfmUserDict(group = []):
             matchList.append(artistmatch)              
             isTopArtist = zip(AllBands, matchList)
             tmpDict = dict(isTopArtist)
-            matchDict = {u:tmpDict}
+            matchDict = {str(u):tmpDict}
             userDict.update(matchDict)
     
     return userDict
