@@ -29,6 +29,5 @@ def getwords(doc):
         if type(word) == unicode:
             if len(word) < 20 and len(word) > 3:
                 encodedWord = unicode(string.lower(word))
-                print encodedWord
                 result[encodedWord] = 1
     return result
