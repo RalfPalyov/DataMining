@@ -1,10 +1,11 @@
+import aufgabe2_1_1
 
 class Classifier:
     __cc = {'Good': 0, 'Bad': 0}
     __fc = {}
 
 
-    def __init__(self, fc, cc):
+    def __init__(self, fc = {}, cc = {'Good': 0, 'Bad': 0}):
         '''Constructor for Classifier-class
        --------------------------------
        The Classifier needs two dictionaries for the input.
@@ -27,7 +28,21 @@ class Classifier:
 
 
     def incf(self, word, category):
-        pass
+        '''
+        Increase the count of the documents in category which contain the passed word.
+        
+        Paremters:
+        word: String, the word that must be contained
+        category: String, the category 
+        '''
+        try:
+            self.__cc[category]
+        except KeyError:
+            return False
+        try:
+            self.__fc[word][category] = self.__fc[word][category] + 1
+        except:
+            self.__fc[word] = {category: 1}
 
 
     def incc(self, category):
@@ -40,8 +55,10 @@ class Classifier:
         returns:
         --------
         void'''
-        newCount = self.__cc.get(category) +1
-        self.__cc.update({category: newCount})
+        try:
+            self.__cc[category] = self.__cc[category] + 1
+        except KeyError:
+            return False
 
 
 
@@ -55,7 +72,11 @@ class Classifier:
         returns:
         --------
         Value of the count (Integer)'''
-        return self.__fc[f][category]
+        try:
+            return self.__fc[f][category]
+        except KeyError:
+            return 0
+         
 
 
     def catcounts(self, category):
@@ -67,7 +88,10 @@ class Classifier:
         returns:
         --------
         Value of the count (Integer)'''
-        return self.__cc.get(category)
+        try:
+            return self.__cc[category]
+        except KeyError:
+            return 0
 
 
     def totalcount(self):
@@ -87,9 +111,18 @@ class Classifier:
 
 
     def train(self, item, category):
-        pass
-
-
+        '''
+        Train the object with a document/item.
+        
+        Parameters:
+        item: String, document to train with
+        category: String ('Bad'|'Good'), items category
+        '''
+        
+        self.incc(category)
+        
+        for word in self.getFeatures(item).iterkeys():
+            self.incf(word, category)        
 
     def fprob(self, f, category):
         try:
@@ -99,4 +132,33 @@ class Classifier:
             return -1
 
 
+
+    def getFeatures(self, text):
+        '''
+        Wrapper for aufgabe2_1_1.getwords(text). See the docu there
+        '''
+        return aufgabe2_1_1.getwords(text)
+    
+    
+    
+    def prob(self, item, cat):
+        '''
+        Calculates posterior probability (germ.: a-posteriori-Wahrscheinlichkeit) of category given a document.
+        
+        Parameters:
+        item: String, document
+        cat: String ('Bad'|'Good'), category
+        
+        Return:
+        Float, probability
+        '''
+        
+        probProduct = 1.0
+        aPriori = self.catcounts(cat) / self.totalcount()
+        
+        for word in self.getFeatures(item):
+            probProduct = probProduct * self.weightedprob(word, cat)
+        
+        return probProduct * aPriori
+    
 
