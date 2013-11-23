@@ -34,14 +34,14 @@ test.incf("Apple", "Bad")
 test.incf("Orange", "Bad")
 test.incf("Banana", "Good")
 test.train(doc, "Bad")
+print test.weightedprob('hated', 'Bad') #should be 0.8333
 
 # simple test results #
 print test.catcounts('Good') #should be 4
 print test.catcounts('Bad') #should be 2
-print test.totalcount() #should be 6
+
 print fcTest["Apple"]["Bad"] #should be 1
 print fcTest["monsters"]["Bad"] #should be 2
-print test.fprob('alone', 'Bad')#should be 1
 
 
 # = = = = = = = = = = = = =
@@ -55,7 +55,7 @@ After a time, a little dark-brown dog came trotting with an intent air down the 
 He stopped opposite the child, and the two regarded each other. The dog hesitated for a moment, but presently he made some little advances with his tail. The child put out his hand and called him. In an apologetic manner the dog came close, and the two had an interchange of friendly pattings and waggles. The dog became more enthusiastic with each moment of the interview, until with his gleeful caperings he threatened to overturn the child. Whereupon the child lifted his hand and struck the dog a blow upon the head."
 doc4 = u"During the whole of a dull, dark, and soundless day in the autumn of the year, when the clouds hung oppressively low in the heavens, I had been passing alone, on horseback, through a singularly dreary tract of country; and at length found myself, as the shades of the evening drew on, within view of the melancholy House of Usher. I know not how it was--but, with the first glimpse of the building, a sense of insufferable gloom pervaded my spirit. I say insufferable; for the feeling was unrelieved by any of that half-pleasurable, because poetic, sentiment, with which the mind usually receives even the sternest natural images of the desolate or terrible."
 
-test = docclass.Classifier()
+test = docclass.Classifier(fc={}, cc=ccTest)
 
 print test.catcounts("cat") #should return 0
 print test.fcount("none", "cat") #should return 0

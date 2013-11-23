@@ -3,9 +3,10 @@ import aufgabe2_1_1
 class Classifier:
     __cc = {'Good': 0, 'Bad': 0}
     __fc = {}
+    __initProb = 0
 
 
-    def __init__(self, fc = {}, cc = {'Good': 0, 'Bad': 0}):
+    def __init__(self, fc, cc):
         '''Constructor for Classifier-class
        --------------------------------
        The Classifier needs two dictionaries for the input.
@@ -25,13 +26,14 @@ class Classifier:
        '''
         self.__cc = cc
         self.__fc = fc
+        self.__initProb = 0.5
 
 
     def incf(self, word, category):
         '''
         Increase the count of the documents in category which contain the passed word.
         
-        Paremters:
+        Parameters:
         word: String, the word that must be contained
         category: String, the category 
         '''
@@ -95,7 +97,7 @@ class Classifier:
 
 
     def totalcount(self):
-        '''Returns the total count of values Parameters to pass:
+        '''Returns the total count of values
         Parameters to pass:
         -------------------
         None
@@ -104,8 +106,8 @@ class Classifier:
         --------
         Total count of both categories(Integer)'''
         result = 0
-        for key in self.__cc.keys():
-            result += self.__cc.get(key)
+        for item, v in self.__fc.iteritems():
+            result += self.__fc.__getitem__(item).values()[0]
         return result
 
 
@@ -157,8 +159,20 @@ class Classifier:
         aPriori = self.catcounts(cat) / self.totalcount()
         
         for word in self.getFeatures(item):
-            probProduct = probProduct * self.weightedprob(word, cat)
-        
-        return probProduct * aPriori
+            probProduct *= self.weightedprob(word, cat)
+
+        result = probProduct * aPriori
+        return result
+
+    def weightedprob(self, f, category):
+        wprob = -1
+        count = self.fcount(f, category)
+        denominator = 0
+        counter = self.__initProb + count * self.fprob(f, category)
+        denominator = 1+ count
+        wprob = counter / denominator
+        return wprob
+
+
     
 
