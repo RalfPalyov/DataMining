@@ -6,6 +6,7 @@ class Classifier:
     __initProb = 0
 
 
+
     def __init__(self, fc, cc):
         '''Constructor for Classifier-class
        --------------------------------
@@ -29,6 +30,7 @@ class Classifier:
         self.__initProb = 0.5
 
 
+
     def incf(self, word, category):
         '''
         Increase the count of the documents in category which contain the passed word.
@@ -45,6 +47,7 @@ class Classifier:
             self.__fc[word][category] = self.__fc[word][category] + 1
         except:
             self.__fc[word] = {category: 1}
+
 
 
     def incc(self, category):
@@ -96,6 +99,7 @@ class Classifier:
             return 0
 
 
+
     def totalcount(self):
         '''Returns the total count of values
         Parameters to pass:
@@ -109,6 +113,13 @@ class Classifier:
         for item, v in self.__fc.iteritems():
             result += self.__fc.__getitem__(item).values()[0]
         return result
+
+
+
+    def totalwords(self):
+        '''prints all values to the console'''
+        for item, v in self.__fc.iteritems():
+            print str(item)
 
 
 
@@ -126,9 +137,12 @@ class Classifier:
         for word in self.getFeatures(item).iterkeys():
             self.incf(word, category)        
 
+
+
+
     def fprob(self, f, category):
         try:
-            return (self.fcount(f, category))/(self.catcounts(category))
+            return long(self.fcount(f, category))/(self.catcounts(category))
         except StandardError:
             print 'Care, ZeroDivision or not on KeyList'
             return -1
@@ -140,9 +154,10 @@ class Classifier:
         Wrapper for aufgabe2_1_1.getwords(text). See the docu there
         '''
         return aufgabe2_1_1.getwords(text)
-    
-    
-    
+
+
+
+
     def prob(self, item, cat):
         '''
         Calculates posterior probability (germ.: a-posteriori-Wahrscheinlichkeit) of category given a document.
@@ -156,7 +171,7 @@ class Classifier:
         '''
         
         probProduct = 1.0
-        aPriori = self.catcounts(cat) / self.totalcount()
+        aPriori = float(self.catcounts(cat)) / float(self.totalcount())
         
         for word in self.getFeatures(item):
             probProduct *= self.weightedprob(word, cat)
@@ -164,8 +179,11 @@ class Classifier:
         result = probProduct * aPriori
         return result
 
+
+
+
     def weightedprob(self, f, category):
-        wprob = -1
+        wprob = -1.0
         count = self.fcount(f, category)
         denominator = 0
         counter = self.__initProb + count * self.fprob(f, category)
