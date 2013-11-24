@@ -30,7 +30,10 @@ v = ( v1 )
 
 3. Was versteht man im Kontext der NNMF unter:
     * Merkmalsmatrix
+        -> Definiert, aus welchen Wörtern die Merkmale gebildet werden (ist ein Faktor der NNMF)
     * Gewichtsmatrix
+        -> Definiert, mit welchem Gewicht die Merkmale in verschiedenen Artikeln auftreten (zweiter Faktor der NNMF)
+    Es gilt a (NNMF) = H * W | H = Merkmalsmatrix; W = Gewichtsmatrix
 
 4. Wie definieren die Zeilen der Merkmalsmatrix die einzelnen Merkmale (Topics)?
 
@@ -38,6 +41,18 @@ v = ( v1 )
 
 6. Wie werden in Numpy zwei Arrays:
     - im Sinne der Matrixmultiplikation multipliziert?
+        array1 = numpy.array([[0, 2],[2, 2]])
+        array2 = numpy.array([[0, 1],[2, 3]])
+
+        arrayMult = array1 * array2
+
     - elementweise multipliziert?
+        array1 = numpy.array([[0, 2],[2, 2]])
+        array2 = numpy.array([[0, 1],[2, 3]])
+
+        arrayMult = numpy.multiply(array1, array2)
 
 7. Die Transponierte eines Numpy- Arrays berechnet?
+    array = numpy.array([[0, 1],
+                        [2, 3]])
+    numpy.transpose(array)
