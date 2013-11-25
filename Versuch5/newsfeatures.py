@@ -56,6 +56,7 @@ def separatewords(text):
     except:
         print "Seems like you haven't installed the stopword collection yet."
         nltk.download()
+        sw = stopwords.words('english')
     splitter = re.compile('\\W*')
     return [s.lower() for s in splitter.split(text) if len(s) > 4 and s not in sw]
 
@@ -119,3 +120,4 @@ def getarticlewords():
         result['articletitles'].append(feedTitle)        
     
     return result
+
