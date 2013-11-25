@@ -1,4 +1,5 @@
 import unittest
+import newsfeatures
 
 class JUnitTestCases(unittest.TestCase):
 
@@ -12,9 +13,12 @@ class JUnitTestCases(unittest.TestCase):
 
     ## Testfunctions ##
 
-    def test1(self):
-        # please rename function
-        pass
+    def newsDictTest(self):
+        newsDict = newsfeatures.getNewsDict()
+        print newsDict.keys()
+        print len(newsDict)
+        self.assertTrue(True)
+        #testfix
 
     def test2(self):
         # please rename function
