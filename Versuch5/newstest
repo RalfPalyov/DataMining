@@ -1,0 +1,26 @@
+import unittest
+
+class JUnitTestCases(unittest.TestCase):
+
+    ## Variables ##
+
+
+    ## Setup- Function ##
+    def setUp(self):
+        pass
+
+
+    ## Testfunctions ##
+
+    def test1(self):
+        # please rename function
+        pass
+
+    def test2(self):
+        # please rename function
+        pass
+
+    #...
+
+suite = unittest.TestLoader().loadTestsFromTestCase(JUnitTestCases)
+unittest.TextTestRunner(verbosity=2).run(suite)

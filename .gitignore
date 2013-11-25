@@ -41,3 +41,6 @@ nosetests.xml
 
 # eclipse
 .metadata
+
+#Versuch 5: Unittestresult
+newstestc
