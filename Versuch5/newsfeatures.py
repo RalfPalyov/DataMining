@@ -2,11 +2,13 @@
 Created on 25.11.2013
 
 '''
+import numpy
 
 import feedparser
 from nltk.corpus import stopwords
 import re
 import nltk
+import TransClass
 
 def getNewsDict():
     
@@ -20,20 +22,27 @@ def getNewsDict():
               'http://newsrss.bbc.co.uk/rss/newsonline_world_edition/business/rss.xml',
               'http://newsrss.bbc.co.uk/rss/newsonline_world_edition/europe/rss.xml',
               'http://www.nytimes.com/services/xml/rss/nyt/World.xml',
-              'http://www.nytimes.com/services/xml/rss/nyt/Economy.xml'
+              'http://www.nytimes.com/services/xml/rss/nyt/Economy.xml',
+              'http://rss.nytimes.com/services/xml/rss/nyt/Sports.xml',
+              'http://rss.nytimes.com/services/xml/rss/nyt/Science.xml',
+              'http://rss.nytimes.com/services/xml/rss/nyt/Business.xml',
+              'http://rss.nytimes.com/services/xml/rss/nyt/Technology.xml',
+              'http://rss.nytimes.com/services/xml/rss/nyt/Travel.xml',
+              'http://rss.nytimes.com/services/xml/rss/nyt/InternationalDiningandWine.xml',
+              'http://rss.nytimes.com/services/xml/rss/nyt/Weddings.xml',
+              'http://rss.nytimes.com/services/xml/rss/nyt/PersonalTech.xml',
+              'http://rss.nytimes.com/services/xml/rss/nyt/Obituaries.xml',
+              'http://www.nytimes.com/services/xml/rss/nyt/pop_top.xml'
               ]
     
     newsDict = {}
-    
     for feed in feedList:
-        
         newsFeed = feedparser.parse(feed)
+        for i in range(20):
+            newsTitle = newsFeed['entries'][i]['title']
+            newsDescription = newsFeed['entries'][i]['summary']
+            tmpNewsDict = {newsTitle:newsDescription}
 
-        newsTitle = newsFeed['entries'][1]['title']
-        newsDescription = newsFeed['entries'][1]['summary']
-    
-        tmpNewsDict = {newsTitle:newsDescription}
-        
         newsDict.update(tmpNewsDict)
         
     return newsDict
@@ -101,9 +110,7 @@ def getarticlewords():
     result = {'allwords': {}, 'articlewords': [], 'articletitles': []}
     
     feeds = getNewsDict()
-    
     for feedTitle, feedContent in feeds.iteritems():
-        
         # process the feed text: strip html and tokenize it to words
         wordsInFeed = separatewords(stripHTML(feedContent))
         
@@ -118,6 +125,204 @@ def getarticlewords():
         
         # set the title
         result['articletitles'].append(feedTitle)        
-    
+
     return result
+
+
+def makematrix(allw, articlew):
+    '''
+    This function filters the words of allw in dependency of their length,
+    and in the percentage of their occurrence.
+
+
+    Parameters:
+    ===========
+    allw -> Dictionary of all words in the feeds and their occurrence
+
+    getartWords -> Dictionary of all words in the feeds and the feeds itself
+
+    Return:
+    =======
+
+    Object with two attributes:
+    * The cleaned list of words
+    * The Matrix of these words
+    '''
+    wordVector_tmp = __getListOfWordsLongerAs(allw, 3)
+    wordVector = __getListOfWordsWithPercentOccur(wordVector_tmp, articlew, 60)
+
+    matrix = __createMatrix(wordVector, articlew)
+    __writeMatrixToFile('matrix.txt', wordVector, matrix)
+
+    transportObject = TransClass.TransClass(wordVector, matrix)
+    return transportObject
+
+def __getListOfWordsLongerAs(allw, length):
+    '''
+    Private Function (Do not use it explicit)
+    =========================================
+    Returns only the words, that are long enough
+
+
+    Parameters:
+    ===========
+    allw -> Dictionary of all Words in the feeds and their occurrence
+
+    length -> Integer, defines how long the words have to be
+
+    Returns:
+    ========
+    List with words
+    '''
+    wordVector = []
+    for item, v in allw.iteritems():
+        if v >= length:
+            wordVector.append(item)
+    return wordVector
+
+def __getListOfWordsWithPercentOccur(cleanedWordList, articlew, percent):
+    '''
+    Private Function (Do not use it explicit)
+    =========================================
+    Only these words they are under a special likelihood have to be returned.
+    So this function puts the word of the cleanedWordList in a dependency to
+    his percentage of occurrence. If the passed percentage is bigger than the
+    percentage of occurrence of the single word in all feeds it will be returned.
+
+    Parameters:
+    ===========
+    cleanedWordList -> List of words (should be the result of
+    __getListOfWordsLongerAs)
+
+    articlew -> The List of words in the feeds
+
+    percent -> Percentage (float)
+
+    Returns:
+    ========
+    List with words
+    '''
+    resultList = []
+    onePercent = float(float(len(articlew)) / 100)
+    resultDict = {}
+    limit = float(percent) / 100
+
+    for word in cleanedWordList:
+        resultDict.__setitem__(word, onePercent)
+    counter = 1
+
+    for feedList in articlew:
+        for word in cleanedWordList:
+            if word in feedList:
+                newPerc = resultDict.__getitem__(word)
+                newPerc += onePercent
+                resultDict.__setitem__(word, newPerc)
+        counter += 1
+
+    for item, v in resultDict.iteritems():
+        if v <= limit:
+            resultList.append(item)
+    return resultList
+
+def __createMatrix(wordVector, articlew):
+    '''
+    Private Function (Do not use it explicit)
+    =========================================
+    This Function creates the matrix. The Matrix is
+    2- Dimensional.
+
+    Example:
+    For two words in the wordvector and 4 Feeds
+    in the articlew this function will create
+    a Matrix like this:
+
+    [ 2 0 ]
+    [ 0 1 ]
+    [ 2 1 ]
+    [ 1 0 ]
+
+    The Rows are the amount of the feeds. So we get 4 rows.
+    The Columns are the words in the wordVector.
+    A Query for the Value [0][0] returns the 2. The Word
+    in the first column occurs twice in the first feed.
+
+    Please Note:
+    This is a cleaned matrix. All Feed where no of the words
+    in the wordVector occurs are deleted.
+
+    [ 2 0 ]
+    [ 0 1 ]         [ 2 0 ]
+    [ 2 1 ]   ->    [ 0 1 ]
+    [ 0 0 ]         [ 2 1 ]
+    [ 1 0 ]         [ 1 0 ]
+    [ 0 0 ]
+
+    Parameters:
+    ===========
+    wordVector -> is the final vector of words.
+    articlew -> The List of words in the feeds
+
+    Returns:
+    ========
+    Matrix (numpy.matrix)
+    '''
+    matrix = numpy.zeros(shape=(len(articlew), len(wordVector)))
+    zeroTestArray = numpy.zeros(shape=(1, len(wordVector)))[0]
+    rowCounter = 0
+    columnCounter = 0
+    for feed in articlew:
+        columnCounter = 0
+        for word in wordVector:
+            if word in feed:
+                matrix[rowCounter, columnCounter] = feed[word]
+            columnCounter += 1
+        rowCounter += 1
+
+    dataBuffer = []
+    for vector in matrix:
+        if numpy.array_equal(vector, zeroTestArray) is False:
+            dataBuffer.append(vector)
+    matrix = numpy.matrix(dataBuffer)
+
+    return matrix
+
+def __writeMatrixToFile(path, wordVector, matrix):
+    '''
+    Private Function (Do not use it explicit)
+    =========================================
+    This function saved the matrix in a file.
+
+    Firs Row is the Words of the wordVector,
+    second row is the matrix
+
+    Example/ pattern:
+
+    holiday airlines
+    [[ 5.  0.]], [[ 5.  0.]], [[ 5.  4.]]
+
+    Parameters:
+    ===========
+
+    path -> Path to the save- location
+    wordVector -> final vector of words
+    matrix -> matrix
+
+    Returns:
+    ========
+    Void
+    '''
+    resultString = ''
+    for word in wordVector:
+        resultString += str(word + ' ')
+    resultString += str('\n')
+
+    counter = 0
+    for vector in matrix:
+        if counter is not len(matrix)-1:
+            resultString += str(vector) + str(', ')
+        else:
+            resultString += str(vector)
+        counter += 1
+    writer = open(path, "w")
+    writer.write(resultString)
 
