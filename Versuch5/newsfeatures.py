@@ -326,3 +326,155 @@ def __writeMatrixToFile(path, wordVector, matrix):
     writer = open(path, "w")
     writer.write(resultString)
 
+
+
+def showfeatures(w,h,titles,wordvec):
+    '''
+    The features are defined by words which are
+    characteristic for each feature.
+    Each article/feed can contain words that are
+    part of different features, so each article/feed
+    can be assigned to several features.
+    
+    Print the six most significant words of each feature.
+    Print the three most significant features of each
+    article/feed.
+    
+    
+    Parameters:
+    w:        feature matrix
+    h:        weight matrix
+    titles:   list of feed/article titles
+    wordvec:  list of all words
+    
+    '''
+    
+    # most significant words of each feature
+    # - - - - - - - - - - - - - - - - - - - -
+    
+    print "\nmost significant words of each feature"
+    print "- - - - - - - - - - - - - - - - - - - -\n"
+    
+    # how many words?
+    n = 6;
+    
+    mostSignificantWordsAllFeatures = __getMostSignificantColsForEachRow(h, wordvec)
+    
+    if mostSignificantWordsAllFeatures != None:
+        __printMostSignificantColsForEachRow(mostSignificantWordsAllFeatures, n)        
+        
+    print "\n\n"        
+    
+    
+    
+    # most significant features of each feed
+    # - - - - - - - - - - - - - - - - - - - -
+    
+    print "most significant features of each feed"
+    print "- - - - - - - - - - - - - - - - - - - -\n"
+    
+    # how many features?
+    m = 3
+    
+    mostSignificantFeatureAllArticles = __getMostSignificantColsForEachRow(w)
+    
+    if mostSignificantFeatureAllArticles != None:
+        __printMostSignificantColsForEachRow(mostSignificantFeatureAllArticles, m, titles)
+        
+    
+    
+    
+def __getMostSignificantColsForEachRow(matrix, colIndices = None):
+    '''
+    Sort each row of the passed matrix in descending order.
+    To preserve the original column indices, each item in the
+    result matrix will be expanded by the original colIndex.
+    
+    
+    Paremeters:
+    matrix:     The matrix to sort (nested numpy array or nested list)
+    colIndices: [optional] To preserve the old col indices, each item
+                           will be extended by the old index. In default
+                           case, the columns will be numbers. Set this
+                           parameter to use your own column indices.
+                           Note: The dimension of this parameter must
+                                 match the count of columns in matrix.
+    
+    
+    Return:
+    List(List), a matrix with the same columns than the passed matrix.
+    The columns are sorted, which means, that the row order has changed
+    compared to the passed matrix. The old row index is stored in each
+    item. Example:
+    
+    returnValue['columnIndex']['sortedRowIndex'][0]
+      == passedMatrix['columnIndex']['originalRowIndex']
+      
+    returnValue['columnIndex']['rowIndex'][1] 
+      == passedMatrix['columnIndex'].index(returnValue['columnIndex']['rowIndex'][0])
+     
+    
+    '''
+    
+    result = []
+    
+    if colIndices == None:
+        colIndices = range(len(matrix[0]))
+
+    # iter over matrix rows
+    for row in matrix:
+        
+        rowWithOldColIndeices = []
+        
+        rowIdx = 0
+        
+        for item in row:
+            rowWithOldColIndeices.append([item, colIndices[rowIdx]])
+            rowIdx = rowIdx + 1
+        
+        sortedRow = sorted(rowWithOldColIndeices, key=lambda el: el[0], reverse = True)
+        
+        result.append(sortedRow)
+
+    return result
+
+
+def __printMostSignificantColsForEachRow(matrix, count, name=None):
+    '''
+    Print the most significant column names for each row.
+    
+    Parameters:
+    matrix: Return value of __getMostSignificantColsForEachRow().
+    count:  Define how many cols will be printed for each row. 
+    name:   Used as description of the rows
+    '''
+
+    rowIdx = 0
+    
+    if name == None:
+        name = range(1, len(matrix) + 1)
+
+    # iter over rows
+    for mostSignificantCols in matrix:
+                
+        print str(name[rowIdx]) + ": "
+        
+        outputIndex = 0
+        
+        for itemCountAndOldIndex in mostSignificantCols:
+            
+            # don't print all
+            if outputIndex == count:
+                break
+            
+            # print            
+            print str(itemCountAndOldIndex[1]) + " (" + str(itemCountAndOldIndex[0]) + ")"
+            
+            outputIndex = outputIndex + 1
+        
+        print "\n" 
+        
+        rowIdx = rowIdx + 1 
+
+
+    
