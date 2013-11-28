@@ -148,7 +148,7 @@ def makematrix(allw, articlew):
     * The cleaned list of words
     * The Matrix of these words
     '''
-    wordVector_tmp = __getListOfWordsLongerAs(allw, 3)
+    wordVector_tmp = __getListOfWordsLongerAs(allw, 4)
     wordVector = __getListOfWordsWithPercentOccur(wordVector_tmp, articlew, 60)
 
     matrix = __createMatrix(wordVector, articlew)
@@ -157,18 +157,23 @@ def makematrix(allw, articlew):
     transportObject = TransClass.TransClass(wordVector, matrix)
     return transportObject
 
-def __getListOfWordsLongerAs(allw, length):
+def __getListOfWordsLongerAs(allw, amount):
     '''
     Private Function (Do not use it explicit)
     =========================================
-    Returns only the words, that are long enough
+    Returns only the words, that occur more often than the amount
 
 
     Parameters:
     ===========
     allw -> Dictionary of all Words in the feeds and their occurrence
 
-    length -> Integer, defines how long the words have to be
+    amount -> Integer, defines the upper interval for their occurrence
+
+    Example:
+    An amount of 4 returns all words, they've an occurrence of the amount or higher.
+    Like the entries 'airlines': 5 or 'holiday': 6
+    But not 'experimental': 3 or 'Datamining': 1
 
     Returns:
     ========
@@ -176,7 +181,7 @@ def __getListOfWordsLongerAs(allw, length):
     '''
     wordVector = []
     for item, v in allw.iteritems():
-        if v >= length:
+        if v >= amount:
             wordVector.append(item)
     return wordVector
 
