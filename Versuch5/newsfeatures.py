@@ -212,7 +212,7 @@ def __getListOfWordsWithPercentOccur(cleanedWordList, articlew, percent):
     List with words
     '''
     resultList = []
-    onePercent = float(float(len(articlew)) / 100)
+    onePercent = float(float(len(cleanedWordList)) / 100)
     resultDict = {}
     limit = float(percent) / 100
 
@@ -394,7 +394,7 @@ def showfeatures(w,h,titles,wordvec):
        
 def cost(A,B):
     '''
-    calculates the euclidean distance betreen two matrices
+    calculates the euclidean distance between two matrices
     
     Parameters:
     A:        Matrix A
@@ -417,6 +417,14 @@ def cost(A,B):
     
     
 def nnmf(A, m, it):
+    '''
+    calculates the weight- and the feature matrix
+    
+    Parameters:
+    A:      Matrix A
+    m:      number of features
+    it:     number of iterations
+    '''
     
     matrShape = A.shape
     matrRows = matrShape[0]
@@ -425,12 +433,15 @@ def nnmf(A, m, it):
     flatH = numpy.array([0 for x in xrange(m*matrColumns)])
     flatW = numpy.array([0 for x in xrange(matrRows*m)])
     
+    # fill feature-array with random numbers
     for i in range(m*matrColumns):
         flatH[i] = random.randint(1,9)
     
+    #fill weight-array with randdom numbers
     for i in range(matrRows*m):
         flatW[i] = random.randint(1,9)
-        
+    
+    #create shaped matrices   
     H = flatH.reshape(m,matrColumns)
     W = flatW.reshape(matrRows,m)
     
@@ -442,7 +453,8 @@ def nnmf(A, m, it):
         
         if costs < 5:
             break
-    
+        
+        #create transposed matrices
         Ht = H.transpose()
         Wt = W.transpose()
         
