@@ -9,6 +9,8 @@ from nltk.corpus import stopwords
 import re
 import nltk
 import TransClass
+import math
+import random
 
 def getNewsDict():
     
@@ -38,12 +40,14 @@ def getNewsDict():
     newsDict = {}
     for feed in feedList:
         newsFeed = feedparser.parse(feed)
-        for i in range(20):
+        newsLen = newsFeed['entries']
+        for i in range(len(newsLen)):
             newsTitle = newsFeed['entries'][i]['title']
             newsDescription = newsFeed['entries'][i]['summary']
             tmpNewsDict = {newsTitle:newsDescription}
-
-        newsDict.update(tmpNewsDict)
+            print newsTitle
+            print newsDescription
+            newsDict.update(tmpNewsDict)
         
     return newsDict
 
@@ -385,7 +389,74 @@ def showfeatures(w,h,titles,wordvec):
     
     if mostSignificantFeatureAllArticles != None:
         __printMostSignificantColsForEachRow(mostSignificantFeatureAllArticles, m, titles)
+       
+       
+       
+def cost(A,B):
+    '''
+    calculates the euclidean distance betreen two matrices
+    
+    Parameters:
+    A:        Matrix A
+    B:        Matrix B
+    '''
+
+    arrayA = numpy.array(A)
+    arrayB = numpy.array(B)
+
+    flatA = arrayA.flatten()
+    flatB = arrayB.flatten()
+    
+    costs = 0
+    
+    for i in range(len(flatA)):
+        costs = costs + math.pow(flatA[i]-flatB[i],2)
+    
+    return costs
+    
+    
+    
+def nnmf(A, m, it):
+    
+    matrShape = A.shape
+    matrRows = matrShape[0]
+    matrColumns = matrShape[1] 
+    
+    flatH = numpy.array([0 for x in xrange(m*matrColumns)])
+    flatW = numpy.array([0 for x in xrange(matrRows*m)])
+    
+    for i in range(m*matrColumns):
+        flatH[i] = random.randint(1,9)
+    
+    for i in range(matrRows*m):
+        flatW[i] = random.randint(1,9)
         
+    H = flatH.reshape(m,matrColumns)
+    W = flatW.reshape(matrRows,m)
+    
+    for i in range(it):
+    
+        B = numpy.dot(W,H)
+        
+        costs = cost(A,B)
+        
+        if costs < 5:
+            break
+    
+        Ht = H.transpose()
+        Wt = W.transpose()
+        
+        counter = numpy.dot(Wt, A)
+        denominator = numpy.dot((numpy.dot(Wt, W)), H)
+
+        H = numpy.array(H) * (numpy.array(counter) / numpy.array(denominator))
+        
+        counter = numpy.dot(A, Ht)
+        denominator = numpy.dot((numpy.dot(W, H)), Ht)
+
+        W = numpy.array(W) * (numpy.array(counter) / numpy.array(denominator))
+    
+    return H, W  
     
     
     
