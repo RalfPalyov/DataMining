@@ -45,8 +45,6 @@ def getNewsDict():
             newsTitle = newsFeed['entries'][i]['title']
             newsDescription = newsFeed['entries'][i]['summary']
             tmpNewsDict = {newsTitle:newsDescription}
-            print newsTitle
-            print newsDescription
             newsDict.update(tmpNewsDict)
         
     return newsDict
@@ -212,7 +210,7 @@ def __getListOfWordsWithPercentOccur(cleanedWordList, articlew, percent):
     List with words
     '''
     resultList = []
-    onePercent = float(float(len(cleanedWordList)) / 100)
+    onePercent = float(1.0 / float(len(articlew)))
     resultDict = {}
     limit = float(percent) / 100
 
@@ -442,8 +440,8 @@ def nnmf(A, m, it):
         flatW[i] = random.randint(1,9)
     
     #create shaped matrices   
-    H = flatH.reshape(m,matrColumns)
-    W = flatW.reshape(matrRows,m)
+    H = numpy.reshape(flatH, (m,matrColumns))
+    W = numpy.reshape(flatW, (matrRows,m))
     
     for i in range(it):
     
@@ -540,7 +538,7 @@ def __printMostSignificantColsForEachRow(matrix, count, name=None):
     rowIdx = 0
     
     if name == None:
-        name = range(1, len(matrix) + 1)
+        name = range(len(matrix))
 
     # iter over rows
     for mostSignificantCols in matrix:
@@ -565,4 +563,3 @@ def __printMostSignificantColsForEachRow(matrix, count, name=None):
         rowIdx = rowIdx + 1 
 
 
-    
