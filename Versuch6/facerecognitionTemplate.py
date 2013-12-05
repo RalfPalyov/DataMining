@@ -118,8 +118,8 @@ def calculateNormedArrayOfFaces(length, matrix):
     '''
     resultMatrix = matrix
     for row in range(len(matrix)):
+        imageAverage = np.average(matrix[row])
         for coulumn in range(length):
-            imageAverage = np.average(matrix[row])
             #print str('Average of Line: ' + str(imageAverage))
             #print str('Row: ' + str(row) + ' Col: ' + str(coulumn))
             #print str('For Row: ' + str(matrix[row]))
