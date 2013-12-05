@@ -2,19 +2,12 @@ __author__ = 'janhorak'
 
 import unittest
 
+import numpy as np
 import facerecognitionTemplate as face
 
 class JUnitTestCases(unittest.TestCase):
 
-    def image(self):
-        '''
-        IMPORTANT
-        =========
-        BE CAREFULL: ITS A LONGTERM- TEST!!!
-        ~ 3 - 5 Minutes with ~4GB Ram
-
-        If you want to use this test, rename the def with a prefix "test_"
-        '''
+    def test_image(self):
         list = face.generateListOfImgs(face.parseDirectory('res/training', 'png'))
         self.assertTrue(list is not None)
         # size of the pitcure is 41750 - so we need a length of 41750 for the matrix
@@ -22,6 +15,17 @@ class JUnitTestCases(unittest.TestCase):
         self.assertIsNotNone(matrix)
         normedArrayOfFaces = face.calculateNormedArrayOfFaces(41750, matrix)
         self.assertIsNotNone(normedArrayOfFaces)
+        
+    def test_eigenfaces(self):
+        eigenfaces = face.calculateEigenfaces(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]]), 3, 1)
+        self.assertIsNotNone(eigenfaces)
+        
+    def test_projectImage(self):
+        image1 = [1, 2, 3, 4]
+        image2 = [9, 8, 7, 6] 
+        eigenfaces = face.calculateEigenfaces(np.array([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]]), 2, 2)
+        self.assert_(np.all(np.equal(face.projectImageOnEigenspace(eigenfaces, image1), face.projectImagesOfSamePersonOnEigenspace(eigenfaces, [image1, image1]))), "Projection results must be equal.")
+        self.assertIsNotNone(face.projectImagesOfSamePersonOnEigenspace(eigenfaces, [image1, image2]))
 
 
 suite = unittest.TestLoader().loadTestsFromTestCase(JUnitTestCases)
