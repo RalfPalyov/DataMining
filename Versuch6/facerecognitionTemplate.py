@@ -7,6 +7,7 @@ import numpy as np
 
 import tkFileDialog
 from nltk.chunk.named_entity import shape
+from decimal import Clamped
 
 
 def parseDirectory(directoryName,extension):
@@ -43,11 +44,11 @@ def generateListOfImgs(list):
     resultList = []
     for i in range(len(list)):
         try:
-            image = Image.open(list[i])
+            image = Image.open(list[i]).convert('L')
             #print str('size of ' +str(list[i]) + ': '+ str(image.size[0]) + "x" + str(image.size[1]))
             resultList.append(image)
         except StandardError:
-            print 'Error: Can\'t read file: ' + image
+            print 'Error: Can\'t read file: ' + str(image)
     return resultList
 
 def convertImgListToNumpyData(length, list):
@@ -86,12 +87,12 @@ def convertImgListToNumpyData(length, list):
         pixelData = []
         for i in range(height):
             for j in range(width):
-                pixelValue = image.getpixel((j, i))[0]
+                pixelValue = image.getpixel((j, i))
                 if pixelValue > heighestValue:
                     heighestValue = pixelValue
                 pixelData.append(pixelValue)
 
-        for i in range(len(pixelData)-1):
+        for i in range(len(pixelData)):
             newValue = float(float(pixelData[i]) / float(heighestValue))
             pixelData[i] = newValue
 
@@ -100,6 +101,7 @@ def convertImgListToNumpyData(length, list):
             resultMatrix[k][counter] = x
             counter += 1
     return resultMatrix
+
 
 def calculateNormedArrayOfFaces(length, matrix):
     '''
@@ -116,17 +118,17 @@ def calculateNormedArrayOfFaces(length, matrix):
     ========
     resultMatrix -> normed matrix of pixelvalues
     '''
-    resultMatrix = matrix
+    resultMatrix = np.empty(np.shape(matrix))
     imageSum = matrix[0]
     for row in range(1, len(matrix)):
-        imageSum = imageSum + row
+        imageSum = imageSum + matrix[row]
     averageImage = imageSum / len(matrix)
     for row in range(len(matrix)):
         for coulumn in range(length):
             #print str('Average of Line: ' + str(imageAverage))
             #print str('Row: ' + str(row) + ' Col: ' + str(coulumn))
             #print str('For Row: ' + str(matrix[row]))
-            pixel = resultMatrix[row][coulumn]
+            pixel = matrix[row][coulumn]
             #print str('Current Pixelvalue: '+str(pixel))
             pixel -= averageImage[row]
             if pixel < 0:
@@ -229,7 +231,74 @@ def projectImagesOfSamePersonOnEigenspace(eigenVectors, images):
         eigenspacePointSum = eigenspacePointSum + projectImageOnEigenspace(eigenVectors, image)
         
     return eigenspacePointSum / len(images) 
+
+
+
+def saveEigenvektorsAsImage(originalMatrix, eigenVectors, imageRatio = (167, 250)):
+    '''
+    Write a picture representation of each eigenvector
+    to the disk ('res/eigenvectors'). This makes it 
+    possible to see how the eigenfaces look like.
+    The normalization cut a little bit of the darker
+    areas in the pictures, so this is not fully 
+    compareable to the original images.
     
+    Parameters:
+    originalMatrix: return value of convertImgListToNumpyData()
+    eigenVectors:   2 dimensional List/array, used to define eigenspace, each row represents a eigenvector
+    imageRatio:     list/tupel, dimension of the images, first value represents width, second height
+    
+    '''    
+    
+    printableEigenVectors = calculateNormedArrayOfFacesReverse(originalMatrix, eigenVectors)
+    
+    vectorIdx = 0
+    for eigenVector in printableEigenVectors:      
+        
+        imageArray = np.empty(len(eigenVector), dtype="uint8")
+        
+        pixelIdx = 0        
+        for pixel in eigenVector:
+            imageArray[pixelIdx] = pixel * 255
+            pixelIdx = pixelIdx + 1
+        
+        imageArray = np.reshape(imageArray, (imageRatio[1], imageRatio[0]))
+                
+        image = Image.fromarray(imageArray, "L")        
+        image.save("res/eigenvectors/vector_" + str(vectorIdx) + ".png", "png")
+        
+        vectorIdx = vectorIdx + 1
+        
+
+def calculateNormedArrayOfFacesReverse(originalMatrix, normedArray):
+    '''
+    This function tries to undo the changes performed by calculateNormedArrayOfFaces().
+    This is required if you changed the faces and want to print them out.
+    A lot of information gets lost in the normalization. The result of this
+    function is not as good as you may be want it to be.
+
+    Parameters:
+    originalMatrix: numpy array, same matrix that was passed to calculateNormedArrayOfFaces()
+    normedArray:    numpy array, return value of calculateNormedArrayOfFaces()
+
+    Returns:
+    Numpy array, like originalMatrix.
+    '''
+    pictureLength = len(normedArray[0])
+    
+    resultMatrix = np.empty(np.shape(normedArray))
+    imageSum = originalMatrix[0]
+    for row in range(1, len(originalMatrix)):
+        imageSum = imageSum + originalMatrix[row]
+    averageImage = imageSum / len(originalMatrix)
+    
+    for row in range(len(normedArray)):
+        for coulumn in range(pictureLength):
+            if normedArray[row][coulumn] > 0:
+                resultMatrix[row][coulumn] = normedArray[row][coulumn] + averageImage[row]
+                if resultMatrix[row][coulumn] > 1:
+                    resultMatrix[row][coulumn] = 1
+    return resultMatrix
     
 
 
@@ -262,6 +331,8 @@ if __name__ == '__main__':
     eigenfaces = calculateEigenfaces(normedArrayOfFaces)
     
     relevantEigenfaces = eigenfaces[:7]
+    
+    saveEigenvektorsAsImage(matrix, relevantEigenfaces)
     
     '''
     @todo calculate eigenspace average for all image of one person and compare them with eigenspace point of test image to find the person with minimum distance
