@@ -45,7 +45,7 @@ def generateListOfImgs(list):
     for i in range(len(list)):
         try:
             image = Image.open(list[i]).convert('L')
-            #print str('size of ' +str(list[i]) + ': '+ str(image.size[0]) + "x" + str(image.size[1]))
+            print str('size of ' +str(list[i]) + ': '+ str(image.size[0]) + "x" + str(image.size[1]))
             resultList.append(image)
         except StandardError:
             print 'Error: Can\'t read file: ' + str(image)
@@ -78,28 +78,41 @@ def convertImgListToNumpyData(length, list):
     ========
     resultMatrix -> Matrix (description in header)
     '''
+
+    # creates the resultmatrix of the function
     resultMatrix = np.asfarray(np.zeros(shape=(len(list), len(range(length)))), dtype='float')
+
     for k in range(len(list)):
-        heighestValue = 0
+        # creates the important values per image or per main-loop
+        highestValue = 0
         image = list[k]
         width = image.size[0]
         height = image.size[1]
         pixelData = []
+
+        # splits the image and iterates over the pixel-data
         for i in range(height):
             for j in range(width):
+                # get the value of the pixel a i(height), j(width) - Position
                 pixelValue = image.getpixel((j, i))
-                if pixelValue > heighestValue:
-                    heighestValue = pixelValue
+                # checks if we get a new highest value
+                if pixelValue > highestValue:
+                    highestValue = pixelValue
+                # adding the value of the pixel to the pixeldata-Array
                 pixelData.append(pixelValue)
 
+        # if the pixeldata-array is completed, we are dividing every pixel through the
+        # highest value
         for i in range(len(pixelData)):
-            newValue = float(float(pixelData[i]) / float(heighestValue))
+            newValue = float(float(pixelData[i]) / float(highestValue))
             pixelData[i] = newValue
 
+        # writing the new pixeldata of a single image in a new row of the matrix
         counter = 0
         for x in pixelData:
             resultMatrix[k][counter] = x
             counter += 1
+
     return resultMatrix
 
 
@@ -118,11 +131,16 @@ def calculateNormedArrayOfFaces(length, matrix):
     ========
     resultMatrix -> normed matrix of pixelvalues
     '''
+    # defines the resultMatrix
     resultMatrix = np.empty(np.shape(matrix))
     imageSum = matrix[0]
+
+    # calculates the average of the images
     for row in range(1, len(matrix)):
         imageSum = imageSum + matrix[row]
     averageImage = imageSum / len(matrix)
+
+    # calculates the normed matrix
     for row in range(len(matrix)):
         for coulumn in range(length):
             #print str('Average of Line: ' + str(imageAverage))
@@ -137,7 +155,7 @@ def calculateNormedArrayOfFaces(length, matrix):
             resultMatrix[row][coulumn] = pixel
             #print str('Modified Row: ' +str(matrix[row]))
             #print '---' *10
-    #print resultMatrix
+            
     return resultMatrix
 
 
