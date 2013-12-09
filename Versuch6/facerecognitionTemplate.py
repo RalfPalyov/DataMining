@@ -312,10 +312,9 @@ def calculateNormedArrayOfFacesReverse(originalMatrix, normedArray):
     
     for row in range(len(normedArray)):
         for coulumn in range(pictureLength):
-            if normedArray[row][coulumn] > 0:
-                resultMatrix[row][coulumn] = normedArray[row][coulumn] + averageImage[row]
-                if resultMatrix[row][coulumn] > 1:
-                    resultMatrix[row][coulumn] = 1
+            resultMatrix[row][coulumn] = normedArray[row][coulumn] + averageImage[row]
+            if resultMatrix[row][coulumn] > 1:
+                resultMatrix[row][coulumn] = 1
     return resultMatrix
     
 
