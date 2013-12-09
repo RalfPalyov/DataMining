@@ -7,7 +7,7 @@ import facerecognitionTemplate as face
 
 class JUnitTestCases(unittest.TestCase):
 
-    def est_image(self):
+    def test_image(self):
         list = face.generateListOfImgs(face.parseDirectory('res/training', 'png'))
         self.assertTrue(list is not None)
         # size of the pitcure is 41750 - so we need a length of 41750 for the matrix
@@ -16,11 +16,11 @@ class JUnitTestCases(unittest.TestCase):
         normedArrayOfFaces = face.calculateNormedArrayOfFaces(41750, matrix)
         self.assertIsNotNone(normedArrayOfFaces)
         
-    def est_eigenfaces(self):
+    def test_eigenfaces(self):
         eigenfaces = face.calculateEigenfaces(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]]), 3, 1)
         self.assertIsNotNone(eigenfaces)
         
-    def est_projectImage(self):
+    def test_projectImage(self):
         image1 = [1, 2, 3, 4]
         image2 = [9, 8, 7, 6] 
         eigenfaces = face.calculateEigenfaces(np.array([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]]), 2, 2)
