@@ -1,6 +1,7 @@
 from os.path import isdir,join,normpath
 from os import listdir
 
+import math
 import Image
 
 import numpy as np
@@ -115,7 +116,23 @@ def convertImgListToNumpyData(length, list):
 
     return resultMatrix
 
-
+def calculateAverageArrayOfFaces(matrix):
+    # calculates the average of the images
+    matrShape = matrix.shape
+    matrRows = matrShape[0]
+    matrColumns = matrShape[1] 
+    
+    flatH = matrix.flatten()
+    
+    imageSum = 0
+    
+    for row in range(0, len(flatH)):
+        imageSum += flatH[row]
+    
+    averageImage = imageSum / len(flatH)
+    #print averageImage
+    return averageImage
+    
 def calculateNormedArrayOfFaces(length, matrix):
     '''
     This function returns the normed values of the matrix.
@@ -133,13 +150,10 @@ def calculateNormedArrayOfFaces(length, matrix):
     '''
     # defines the resultMatrix
     resultMatrix = np.empty(np.shape(matrix))
-    imageSum = matrix[0]
 
     # calculates the average of the images
-    for row in range(1, len(matrix)):
-        imageSum = imageSum + matrix[row]
-    averageImage = imageSum / len(matrix)
-
+    averageImage = calculateAverageArrayOfFaces(matrix)
+    
     # calculates the normed matrix
     for row in range(len(matrix)):
         for coulumn in range(length):
@@ -148,7 +162,7 @@ def calculateNormedArrayOfFaces(length, matrix):
             #print str('For Row: ' + str(matrix[row]))
             pixel = matrix[row][coulumn]
             #print str('Current Pixelvalue: '+str(pixel))
-            pixel -= averageImage[row]
+            pixel -= averageImage
             if pixel < 0:
                 pixel = 0
             #print str('New value of Pixel (Difference): '+str(pixel))
@@ -200,6 +214,18 @@ def calculateEigenfaces(adjfaces,width = None,height = None):
     
     return eigenfaces[sortedEigenValueIndices]
 
+def calculateEuclideanDistance(A, B):
+    
+    flatA = A.flatten()
+    flatB = B.flatten()
+    
+    costs = 0
+    
+    for i in range(len(flatA)):
+        costs = costs + math.pow(flatA[i]-flatB[i],2)
+    
+    costs = math.sqrt(costs)
+    return costs
 
 def projectImageOnEigenspace(eigenVectors, image):
     '''
